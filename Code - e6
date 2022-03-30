@@ -1,0 +1,179 @@
+### e_6 ###
+# We consider Section 3.3 in Howlett, Rylands and Taylor's "Matrix generators for
+# exceptional groups of Lie type". It contains a set of generators of a 27-dimensional
+# representation of the Lie algebra e_6. Whenever we refer to an element X of e_6 as an input/output
+# of a function, we refer to its matrix representation as defined therein unless otherwise specified.
+#
+### Auxiliary functions ###
+# We collect some auxiliary functions.
+#
+# The function "mat_one" gives a (n,n)-matrix with k in the (i,j)-th position
+# and 0 elsewhere.
+def mat_one(n,i,j,k):
+    M=matrix(n,n)
+    M[i-1,j-1]=k
+    return M
+#
+# The function "mat_many" gives a (n,n)-matrix whose nonzero entries are
+# determined by the list L: for each 3-element list X inside L,
+# the matrix has X[2] in the (X[0],X[1])-th position.
+def mat_many(n,LL):
+    return sum(mat_one(n,X[0],X[1],X[2]) for X in LL)
+#
+# The function "lie" gives the Lie bracket of two elements,
+# i.e. the commutator in the natrix representation.
+def lie(a,b):
+    return a*b-b*a
+#
+# The function "many_lie" performs Lie brackets of matrices from a list of
+# matrices SS as indicated by a list of indices LL. The operation is ordered
+# on the left, meaning that we are computing [...[[[S1,S2],S3],S4]...,Sk].
+# For consistency with the notation in our paper, the indices in the input are
+# numbered starting from 1 (whereas the usual SageMath list indices start from 0).
+def many_lie(SS,LL):
+    S=copy(SS[LL[0]-1])
+    l=1
+    while l<len(LL):
+        S=lie(S,SS[LL[l]-1])
+        l+=1
+    return S
+#
+# The function "lemma_A1" gives an extremal element built from
+# two other extremal elements a,b following the construction
+# in Lemma A.1 of our paper: namely, if a,b are extremal then
+# a+[a,b]+1/2*[[a,b],b] is also extremal.
+def lemma_A1(a,b):
+    return a+lie(a,b)+1/2*lie(lie(a,b),b)
+#
+# The function "mat_vec" writes a (n,n)-matrix as a n^2-vector.
+def mat_vec(n,MM):
+    return vector(MM.list())
+#
+# The function "first_nonzero" finds the first nonzero entry of a list.
+# Whenever we apply it, if there is no nonzero entry we have a problem.
+def first_nonzero(ll):
+    le=len(ll)
+    i=0
+    while i<le:
+        if expand(ll[i])!=0:
+            return i
+        i+=1
+    return 'Error'
+#
+# The function "proportional" checks whether two lists are linearly dependent
+# as vectors (and the first one is nonzero).
+def proportional(vv,ww):
+    le=len(vv)
+    i=first_nonzero(vv)
+    rat=ww[i]/vv[i]
+    while i<le:
+        if vv[i]==0:
+            if ww[i]!=0:
+                return False
+        else:
+            if ww[i]/vv[i]!=rat:
+                return False
+        i+=1
+    return True
+###
+### Construction of bases ###
+# We construct the extremal basis.
+#
+# The list "Gen" contains the 12 generators built in Howlett-Rylands-Taylor.
+# They are written down explicitly here: they correspond in our paper
+# to b_1,...,b_6 and their transposes b_-1,...,b_-6.
+n=27
+Gen=[0]*12
+Gen[0]=mat_many(n,[[1,2,1],[11,13,1],[14,16,1],[17,18,1],[19,20,1],[21,22,1]])
+Gen[1]=mat_many(n,[[4,5,1],[6,7,1],[8,10,1],[19,21,1],[20,22,1],[23,24,1]])
+Gen[2]=mat_many(n,[[2,3,1],[9,11,1],[12,14,1],[15,17,1],[20,23,1],[22,24,1]])
+Gen[3]=mat_many(n,[[3,4,1],[7,9,1],[10,12,1],[17,19,1],[18,20,1],[24,25,1]])
+Gen[4]=mat_many(n,[[4,6,1],[5,7,1],[12,15,1],[14,17,1],[16,18,1],[25,26,1]])
+Gen[5]=mat_many(n,[[6,8,1],[7,10,1],[9,12,1],[11,14,1],[13,16,1],[26,27,1]])
+Gen[6]=Gen[0].transpose()
+Gen[7]=Gen[1].transpose()
+Gen[8]=Gen[2].transpose()
+Gen[9]=Gen[3].transpose()
+Gen[10]=Gen[4].transpose()
+Gen[11]=Gen[5].transpose()
+#
+# The list "B" contains the elements forming our extremal basis.
+# The elements b_i with 7<=i<=36 are built from b_1,...,b_6 using
+# lists of indices and repeated Lie brackets; the same holds for
+# the b_-i with 7<=i<=36, replacing b_1,...,b_6 with b_-1,...,b_-6.
+# The remaining elements b'_1,...,b'_6 are built using Lemma A.1.
+I=[[1],[2],[3],[4],[5],[6],[1,3],[2,4],[3,4],[4,5],[5,6],[1,3,4],[2,4,3],[2,4,5],[3,4,5],[4,5,6],[1,3,4,2],[1,3,4,5],[2,4,3,5],[2,4,5,6],[3,4,5,6],[1,3,4,2,5],[1,3,4,5,6],[2,4,3,5,4],[2,4,3,5,6],[1,3,4,2,5,4],[1,3,4,2,5,6],[2,4,3,5,4,6],[1,3,4,2,5,4,3],[1,3,4,2,5,4,6],[2,4,3,5,4,6,5],[1,3,4,2,5,4,3,6],[1,3,4,2,5,4,6,5],[1,3,4,2,5,4,3,6,5],[1,3,4,2,5,4,3,6,5,4],[1,3,4,2,5,4,3,6,5,4,2]]
+Ibar=[[LL[i]+6 for i in range(0,len(LL))] for LL in I]
+Iprime=[[1,7],[2,8],[3,9],[4,10],[5,11],[6,12]]
+B=[many_lie(Gen,LL) for LL in I+Ibar]+[lemma_A1(Gen[LL[0]-1],Gen[LL[1]-1]) for LL in Iprime]
+###
+### Verification functions ###
+# We collect the functions needed for the verification of Theorem 5.2(b) of our paper.
+#
+# The function "linind_mat" checks whether a list of matrices is
+# linearly independent (in Q) as a set of n^2-vectors.
+def linind_mat(n,LL):
+    return not (QQ^(n^2)).are_linearly_dependent([mat_vec(n,MM) for MM in LL])
+#
+# We define the generic element "XX" of e_6 (provided that B is a basis of e_6).
+xvar=list(var('x_%d' % i) for i in (1..len(B)))
+XX=sum(xvar[i-1]*B[i-1] for i in (1..len(B)))
+#
+# The function "is_extremal" checks whether an element AA is extremal in e_6:
+# namely, it checks whether the n^2-list representing [[XX,AA],AA] is proportional
+# to the n^2-list representing AA itself.
+def is_extremal(AA):
+    Aex=lie(lie(XX,AA),AA)
+    return proportional(AA.list(),Aex.list())
+#
+# The function "partial_thm" checks whether for two elements AA,BB we have that
+# [[AA,XX],[BB,XX]] is nonzero. This can be used for a partial check of Theorem 5.2(b),
+# which asserts that the above is nonzero for the first element AA of an extremal basis
+# and for all other elements BB of the same basis.
+# There is a subtlety to keep in mind: the function "first_nonzero" detects entries that are
+# nonzero over Q (or over fields of characteristic 0), but those entries might be zero
+# inside a field F of positive characteristic. Each entry is a quadratic polynomial
+# in the variables x_i that make up the entries of XX, so by the Schwartz-Zippel lemma
+# and the fact that char(F) is not 2 the only problematic case not covered by "first_nonzero"
+# is when the polynomial is divisible by char(F) itself. Thus, we check also that
+# the gcd of the coefficients of the polynomial is 1 or a power of 2.
+def partial_thm(AA,BB):
+    result=lie(lie(AA,XX),lie(BB,XX))
+    ss=first_nonzero(result.list())
+    if ss=='Error':
+        return False
+    list_of_coeff=[i[1] for i in list((QQ[xvar]((result.list())[ss]).coefficients()).items())]
+    gcdl=gcd(list_of_coeff)
+    if gcdl!=1:
+        prime=list(factor(gcdl))
+        if len(prime)>1 or prime[0][0]!=2:
+            return False
+    return True
+###
+### Verification ###
+# We perform the verification.
+#
+# The elements of B are contained in (the representation of) e_6 by the construction
+# in Howlett-Rylands-Taylor.
+#
+# The function "verify" verifies that B is made of 78 linearly independent elements
+# (so that B must be a basis), that it contains only extremal elements (so that B
+# must be an extremal basis), and that Theorem 5.2(b) holds for B and b_1=B[0].
+def verify(SS):
+    le=len(SS)
+    if le!=78:
+        return False
+    if not linind_mat(n,SS):
+        return False
+    i=0
+    while i<le:
+        if not is_extremal(SS[i]):
+            return False
+        i+=1
+    i=1
+    while i<le:
+        if not partial_thm(SS[0],SS[i]):
+            return False
+        i+=1
+    return True
+print(verify(B))
