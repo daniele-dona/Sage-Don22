@@ -1,0 +1,349 @@
+### g_2 ###
+# We consider Table 22.1 in Fulton and Harris's "Representation Theory - A first course".
+# It contains a "multiplication table" for the Lie algebra g_2: in row A and column B,
+# the table shows [A,B]. The 14 elements that span the algebra as a vector space are:
+# H1,H2,X1,Y1,X2,Y2,X3,Y3,X4,Y4,X5,Y5,X6,Y6.
+# We fix this basis and this ordering of the elements from now on.
+# Our elements will be mostly saved as lists of coefficients of their linear combinations
+# in terms of the fixed basis. Whenever we refer to an element X of g_2 as an input/output
+# of a function, we refer to its representation as such a list unless otherwise specified.
+#
+### Construction of matrices ###
+# We translate Table 22.1 back to the adjoint representation. Let X be an element of g_2,
+# written as a column vector v(X) via the coefficients of X in the fixed basis of g_2.
+# For every A in the basis of g_2, we write the matrix M(A) such that M(A)*v(X)=v([A,X]).
+# The list "M" contains the matrices M(A), ordered according to the basis order.
+n=14
+M=[0]*n
+# Element H1
+M[0]=matrix([[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,2,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,-2,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,-3,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,3,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,-1,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,-1,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,3,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,-3,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element H2
+M[1]=matrix([[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,-1,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,2,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,-2,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,-1,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,-1,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,-1]])
+# Element X1
+M[2]=matrix([[0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [-2,1,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,-3,0,0,0,0,0,0],
+             [0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,-2,0,0,0,0],
+             [0,0,0,0,0,0,2,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+             [0,0,0,0,0,0,0,0,-3,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element Y1
+M[3]=matrix([[0,0,-1,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [2,-1,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,3,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,2,0,0,0,0,0],
+             [0,0,0,0,0,-1,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,-1,0,0,0],
+             [0,0,0,0,0,0,0,-2,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,3,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element X2
+M[4]=matrix([[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+             [3,-2,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,-1,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+             [0,0,0,0,0,0,0,0,0,0,-1,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element Y2
+M[5]=matrix([[0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,-1,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,-1,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [-3,2,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,-1,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,1,0,0]])
+# Element X3
+M[6]=matrix([[0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,3,0,0,0,0,0,0],
+             [0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,2,0,0,0,0],
+             [0,0,0,-3,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [1,-1,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,-2,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,-3,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element Y3
+M[7]=matrix([[0,0,0,0,0,0,-1,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,-3,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,-2,0,0,0,0,0],
+             [0,0,0,0,-1,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,3,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [-1,1,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,-1,0],
+             [0,0,0,2,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,3,0,0,0,0]])
+# Element X4
+M[8]=matrix([[0,0,0,0,0,0,0,0,0,2,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,3,0,0,0,0],
+             [0,0,0,0,0,0,0,2,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,-1,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,-2,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,-1],
+             [-1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,3,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,3,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element Y4
+M[9]=matrix([[0,0,0,0,0,0,0,0,-2,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,-3,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+             [0,0,0,0,0,0,-2,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+             [0,0,2,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,-3,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+             [0,0,0,0,0,0,0,-3,0,0,0,0,0,0]])
+# Element X5
+M[10]=matrix([[0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+              [0,0,0,0,0,0,0,0,0,-1,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,-1],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [-3,1,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element Y5
+M[11]=matrix([[0,0,0,0,0,0,0,0,0,0,-1,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,-1,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,-1,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [3,-1,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,-1,0,0,0,0,0,0,0,0]])
+# Element X6
+M[12]=matrix([[0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,-1,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,-1,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,-1,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0]])
+# Element Y6
+M[13]=matrix([[0,0,0,0,0,0,0,0,0,0,0,0,-1,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,-2,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,1,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,-1,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,-1,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,1,0,0,0,0,0,0,0,0,0,0,0,0]])
+###
+### Auxiliary functions ###
+# We collect some auxiliary functions.
+#
+# The function "unit_list" creates an n-list with 1 in position ii and 0 elsewhere.
+def unit_list(ii):
+    ll=[0]*n
+    ll[ii]=1
+    return ll
+#
+# The function "list_vec" translates X into v(X), where X is an element of g_2
+# and v is the representation of X as a column vector mentioned before.
+def list_vec(ll):
+    return matrix(ll).transpose()
+#
+# The function "list_mat" translates X into M(X), where X is an element of g_2
+# and M is the representation of X as a matrix mentioned before.
+def list_mat(ll):
+    MM=matrix(n,n)
+    i=0
+    while i<n:
+        MM=MM+ll[i]*M[i]
+        i+=1
+    return MM
+#
+# The function "first_nonzero" finds the first nonzero entry of a list.
+# Whenever we apply it, if there is no nonzero entry we have a problem.
+def first_nonzero(ll):
+    le=len(ll)
+    i=0
+    while i<le:
+        if expand(ll[i])!=0:
+            return i
+        i+=1
+    return 'Error'
+#
+# The function "proportional" checks whether two lists are linearly dependent
+# as vectors (and the first one is nonzero).
+def proportional(vv,ww):
+    le=len(vv)
+    i=first_nonzero(vv)
+    rat=ww[i]/vv[i]
+    while i<le:
+        if vv[i]==0:
+            if ww[i]!=0:
+                return False
+        else:
+            if ww[i]/vv[i]!=rat:
+                return False
+        i+=1
+    return True
+###
+### Verification functions ###
+# We collect the functions needed for the verification of Theorem 5.2(b) of our paper.
+#
+# We define the generic element "XX" of g_2, already represented as a column vector v(XX).
+xvar=list(var('x_%d' % i) for i in (1..n))
+XX=list_vec(xvar)
+#
+# The function "is_extremal" checks whether an element AA is extremal in g_2:
+# namely, it checks whether the vector representing [AA,[AA,XX]] is proportional
+# to the vector representing AA itself.
+def is_extremal(AA):
+    Am=list_mat(AA)
+    Aex=Am*Am*XX
+    return proportional(AA,Aex.list())
+#
+# The function "partial_thm" checks whether for two elements AA,BB we have that
+# [[AA,XX],[BB,XX]] is nonzero. This can be used for a partial check of Theorem 5.2(b),
+# which asserts that the above is nonzero for the first element AA of an extremal basis
+# and for all other elements BB of the same basis.
+# There is a subtlety to keep in mind: the function "first_nonzero" detects entries that are
+# nonzero over Q (or over fields of characteristic 0), but those entries might be zero
+# inside a field F of positive characteristic. Each entry is a quadratic polynomial
+# in the variables x_i that make up the entries of XX, so by the Schwartz-Zippel lemma
+# and the fact that char(F) is not 2 the only problematic case not covered by "first_nonzero"
+# is when the polynomial is divisible by char(F) itself. Thus, we check also that
+# the gcd of the coefficients of the polynomial is 1 or a power of 2.
+def partial_thm(AA,BB):
+    result=list_mat((list_mat(AA)*XX).list())*list_mat(BB)*XX
+    ss=first_nonzero(result.list())
+    if ss=='Error':
+        return False
+    list_of_coeff=[i[1] for i in list((QQ[xvar]((result.list())[ss]).coefficients()).items())]
+    gcdl=gcd(list_of_coeff)
+    if gcdl!=1:
+        prime=list(factor(gcdl))
+        if len(prime)>1 or prime[0][0]!=2:
+            return False
+    return True
+###
+### Verification ###
+# We perform the verification.
+#
+# The list "S" contains the elements forming our extremal basis.
+# We build it from lists of indices according to the ordering of the fixed basis M.
+I1=[5,6,11,12,13,14]
+S1=[unit_list(l-1) for l in I1]
+I3=[[2,5,6]]
+S3=[(list_vec(unit_list(l[0]-1))+list_vec(unit_list(l[1]-1))-list_vec(unit_list(l[2]-1))).list() for l in I3]
+I4=[[1,2,11,12],[3,6,13,9],[3,9,13,6],[3,8,11,14],[4,5,14,10],[4,10,14,5],[4,7,12,13]]
+S4=[(list_vec(unit_list(l[0]-1))+list_vec(unit_list(l[1]-1))+list_vec(unit_list(l[2]-1))-list_vec(unit_list(l[3]-1))).list() for l in I4]
+S=S1+S3+S4
+#
+# S forms a basis of g_2 because the original basis in Fulton-Harris does and because
+# the elements of S are evidently linearly independent by construction.
+#
+# The function "verify" verifies that S contains only extremal elements and that
+# Theorem 5.2(b) holds for B=S and b_1=S[0].
+def verify(SS):
+    i=0
+    while i<n:
+        if not is_extremal(SS[i]):
+            return False
+        i+=1
+    i=1
+    while i<n:
+        if not partial_thm(SS[0],SS[i]):
+            return False
+        i+=1
+    return True
+print(verify(S))
