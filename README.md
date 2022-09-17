@@ -1,7 +1,7 @@
 # Sage-Don22
 SageMath code for "A sum-bracket theorem for simple Lie algebras" (Dona)
 
-The code deposited here refers to several SageMath programs relative to the paper "A sum-bracket theorem for simple Lie algebras" (available as arXiv:2204.02018), by Daniele Dona.
+The code deposited here refers to several SageMath programs relative to the paper "A sum-bracket theorem for simple Lie algebras" (available as arXiv:2204.02018), by Daniele Dona. Any licence that may apply to the paper "A sum-bracket theorem for simple Lie algebras" applies to all the files contained here as well.
 
 The programs are written in SageMath, version 8.9.
 
